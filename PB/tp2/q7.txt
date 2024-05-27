@@ -1,0 +1,5 @@
+Q7) Faça uma análise da complexidade do algoritmo QuickSort.
+
+Análise da Complexidade do QuickSortO QuickSort tem uma complexidade média e melhor caso de tempo de O(n log n),
+porém, no pior caso, pode ter tempo de O(n^2) se o pivô for escolhido de forma inadequada, 
+levando a partições muito desbalanceadas. A complexidade de espaço é O(log n) devido à recursão.

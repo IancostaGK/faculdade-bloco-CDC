@@ -1,0 +1,10 @@
+documento1.txt
+imagem1.png
+relatorio.docx
+planilha.xlsx
+apresentacao.pptx
+codigo.py
+dados.csv
+video.mp4
+musica.mp3
+backup.zip

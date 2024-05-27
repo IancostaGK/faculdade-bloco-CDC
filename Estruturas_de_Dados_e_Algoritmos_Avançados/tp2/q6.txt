@@ -1,0 +1,17 @@
+grafo = {
+    "broca": ['martelo'],
+    "martelo": ['broca', 'serra', "pregos"],
+    "serra": ['martelo', 'faca'],
+    "faca": ['serra', "colher", "garfo"],
+    "colher": ['faca'],
+    "garfo": ['faca'],
+    "pregos": ['martelo', 'alfinetes', 'agulhas', 'esmalte'],
+    "alfinetes": ['pregos', 'agulhas'],
+    "agulhas": ['pregos', 'alfinetes'],
+    "esmalte": ['pregos', 'sombra', 'escova'],
+    "sombra": ['esmalte', 'oculos'],
+    "escova": ['esmalte'],
+    "oculos": ['sombra']
+}
+
+Crie uma classe que implementa um grafo baseado em listas de adjacência. Represente o grafo da questão 5 como uma instância da sua classe e use-a para imprimir todos os pares de produtos relacionados no formato “(produto a, produto b)“. Cada par deve ser impresso apenas 1 vez, em qualquer ordem. Por exemplo, para o par (escova, esmalte), o programa pode imprimir “(escova, esmalte)” ou “(esmalte, escova)”, mas não ambos

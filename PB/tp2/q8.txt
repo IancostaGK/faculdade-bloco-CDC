@@ -1,0 +1,5 @@
+Q8) Faça uma análise da complexidade do algoritmo QuickSelect.
+
+O QuickSelect é uma variação do QuickSort que seleciona o k-ésimo menor elemento em um array não ordenado.
+Sua complexidade de tempo média é O(n), pois descarta metade dos elementos a cada iteração, porém, no pior caso,
+pode ser O(n^2) se as partições não forem balanceadas. A complexidade de espaço é O(log n) devido à recursão.
