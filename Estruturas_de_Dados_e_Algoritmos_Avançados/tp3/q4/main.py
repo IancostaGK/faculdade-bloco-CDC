@@ -31,4 +31,10 @@ print("Bob está conectado a Elise?",
 print("Bob está conectado a Rodrigo?", 
       grf.busca_dfs(bob, rodrigo))
 
+caminho_bob_elise = grf.busca_dfs_caminho(bob, elise)
+if caminho_bob_elise:
+      print("Caminho de Bob a Elise:", caminho_bob_elise)
+else:
+      print("Não há caminho de Bob a Elise.")
+
 amigos.desenha()

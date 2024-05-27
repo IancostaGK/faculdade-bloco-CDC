@@ -17,6 +17,32 @@ def travessia_dfs(v_orig, visitados=None):
       travessia_dfs(vizinho, visitados)
   return visitados
 
+def busca_dfs_caminho(v_orig, v_dest, visitados=None, caminho=None):
+  """
+  Implementa busca em grafo baseada no 
+  algoritmo de busca em profundidade (DFS)
+  
+  Retorna o caminho encontrado de v_orig a v_dest, 
+  ou None se não houver caminho
+  """
+  if not visitados:
+    visitados = set()
+  if not caminho:
+    caminho = []
+  
+  visitados.add(v_orig)
+  caminho.append(v_orig)
+
+  if v_orig == v_dest:
+      return caminho
+  
+  for vizinho in v_orig.vizinhos:
+    if vizinho not in visitados:
+      novo_caminho = busca_dfs_caminho(vizinho, v_dest, visitados, caminho.copy())
+      if novo_caminho:
+        return novo_caminho
+  
+  return None
 
 def busca_dfs(v_orig, v_dest, 
               visitados=None):
