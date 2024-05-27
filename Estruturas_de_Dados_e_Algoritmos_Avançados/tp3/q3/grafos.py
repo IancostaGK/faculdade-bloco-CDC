@@ -66,6 +66,26 @@ class Grafo(object):
             node_color="#cccccc", node_size=tamanho)
     plt.show()
 
+  def busca_caminho_bfs(self, origem, destino):
+    """
+    Verifica se existe um caminho entre origem e destino no grafo
+    usando busca em largura (BFS).
+    Retorna True se houver caminho, False caso contrário.
+    """
+    fila = Fila()
+    visitados = set()
+    visitados.add(origem)
+    fila.enfileira(origem)
+    while not fila.vazia():
+      vertice_atual = fila.desenfileira()
+      if vertice_atual == destino:
+        return True  # Caminho encontrado
+      for vizinho in vertice_atual.vizinhos:
+        if vizinho not in visitados:
+          visitados.add(vizinho)
+          fila.enfileira(vizinho)
+    return False  # Não há caminho entre origem e destino
+
 
 class GrafoDirecionado(Grafo):
   """Implementa um grafo direcionado"""

@@ -33,4 +33,8 @@ print("Conectados a Rodrigo:",
 print("Conectados a Jamal:", 
       grf.travessia_bfs(jamal) - {jamal})
 
+print("Existe caminho entre Alice e Bob:", amigos.busca_caminho_bfs(alice, bob))
+print("Existe caminho entre Alice e Cynthia:", amigos.busca_caminho_bfs(alice, cynthia))
+print("Existe caminho entre Alice e Melvyn:", amigos.busca_caminho_bfs(alice, melvyn))
+
 amigos.desenha()
