@@ -1,49 +1,8 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-
-
-def travessia_dfs(v_orig, visitados=None):
-  """
-  Implementa travessia de grafo baseada no 
-  algoritmo de busca em profundidade (DFS)
-  
-  Retorna conjunto de vértices visitados
-  """
-  if not visitados:
-    visitados = set()
-  visitados.add(v_orig)
-  for vizinho in v_orig.vizinhos:
-    if vizinho not in visitados:
-      travessia_dfs(vizinho, visitados)
-  return visitados
-
-
-def busca_dfs(v_orig, v_dest, 
-              visitados=None):
-  """
-  Implementa busca em grafo baseada no 
-  algoritmo de busca em profundidade (DFS)
-  
-  Retorna True (se encontrar um caminho de 
-  v_orig a v_dest) ou False (caso contrário)
-  """
-  if (v_orig == v_dest or 
-      v_dest in v_orig.vizinhos):
-    return True
-  if not visitados:
-    visitados = set()
-  visitados.add(v_orig)
-  for vizinho in v_orig.vizinhos:
-    if (vizinho not in visitados and 
-        busca_dfs(vizinho, v_dest, 
-                  visitados)):
-      return True
-  return False
-
+from collections import deque
 
 class Vertice(object):
-  """Implementa um vértice de grafo"""
-
   def __init__(self, valor):
     self.valor = valor
     self.vizinhos = []
@@ -51,27 +10,23 @@ class Vertice(object):
   def __repr__(self):
     return str(self.valor)
 
-
 class Grafo(object):
-  """Implementa um grafo simples"""
-
-  def __init__(self):
+  def __init__(self, direcionado=False):
     self.vertices = []
+    self.direcionado = direcionado
 
   def cria_vertice(self, valor):
-    """Cria vértice com o valor definido"""
     vertice = Vertice(valor)
     self.vertices.append(vertice)
     return vertice
 
   def adiciona_aresta(self, v1, v2):
-    """Adiciona aresta entre v1 e v2"""
     v1.vizinhos.append(v2)
-    v2.vizinhos.append(v1)
+    if not self.direcionado:
+      v2.vizinhos.append(v1)
 
   def desenha(self):
-    """Desenha o grafo"""
-    g = nx.Graph()
+    g = nx.DiGraph() if self.direcionado else nx.Graph()
     for vertice in self.vertices:
       g.add_node(vertice)
       for vizinho in vertice.vizinhos:
@@ -79,52 +34,52 @@ class Grafo(object):
     pos = nx.planar_layout(g)
     tamanho = [300 * len(str(v)) for v in g.nodes]
     nx.draw(g, pos, with_labels=True, arrows=True, 
-            connectionstyle='arc3, rad = 0.1', 
-            node_color="#cccccc", node_size=tamanho)
+      connectionstyle='arc3, rad = 0.1', 
+      node_color="#cccccc", node_size=tamanho)
     plt.show()
 
+  def travessia_dfs(self, v_orig, visitados=None):
+    if not visitados:
+      visitados = set()
+    visitados.add(v_orig)
+    for vizinho in v_orig.vizinhos:
+      if vizinho not in visitados:
+        self.travessia_dfs(vizinho, visitados)
+    return visitados
 
-class GrafoDirecionado(Grafo):
-  """Implementa um grafo direcionado"""
+  def busca_dfs(self, v_orig, v_dest, visitados=None):
+    if v_orig == v_dest or v_dest in v_orig.vizinhos:
+      return True
+    if not visitados:
+      visitados = set()
+    visitados.add(v_orig)
+    for vizinho in v_orig.vizinhos:
+      if vizinho not in visitados and self.busca_dfs(vizinho, v_dest, visitados):
+        return True
+    return False
 
-  def adiciona_aresta(self, v1, v2):
-    """Adiciona aresta entre v1 e v2"""
-    v1.vizinhos.append(v2)
+  def travessia_bfs(self, v_orig):
+    visitados = set()
+    fila = deque([v_orig])
+    while fila:
+      vertice = fila.popleft()
+      if vertice not in visitados:
+        visitados.add(vertice)
+        fila.extend(v for v in vertice.vizinhos if v not in visitados)
+    return visitados
 
-  def desenha(self):
-    """Desenha o grafo"""
-    g = nx.DiGraph()
-    for vertice in self.vertices:
-      g.add_node(vertice)
-      for vizinho in vertice.vizinhos:
-        g.add_edge(vertice, vizinho)
-    pos = nx.planar_layout(g)
-    tamanho = [300 * len(str(v)) for v in g.nodes]
-    nx.draw(g, pos, with_labels=True, arrows=True, 
-            connectionstyle='arc3, rad = 0.1', 
-            node_color="#cccccc", node_size=tamanho)
-    plt.show()
+# Create a graph of each type with the vertices A, B, C, D, E, F, G, H, I, and J, and the edges A-G, A-I, C-F, D-A, D-I, H-D, H-E, H-F, H-G, I-H, J-C, and J-H.
+vertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+arestas = [('A', 'G'), ('A', 'I'), ('C', 'F'), ('D', 'A'), ('D', 'I'), ('H', 'D'), ('H', 'E'), ('H', 'F'), ('H', 'G'), ('I', 'H'), ('J', 'C'), ('J', 'H')]
 
-amigos = Grafo()
+for direcionado in [False, True]:
+  grafo = Grafo(direcionado)
+  vertice_dict = {v: grafo.cria_vertice(v) for v in vertices}
+  for v1, v2 in arestas:
+    grafo.adiciona_aresta(vertice_dict[v1], vertice_dict[v2])
 
-alice = amigos.cria_vertice("Alice")
-bob = amigos.cria_vertice("Bob")
-cynthia = amigos.cria_vertice("Cynthia")
-diana = amigos.cria_vertice("Diana")
-elise = amigos.cria_vertice("Elise")
-fred = amigos.cria_vertice("Fred")
-jamal = amigos.cria_vertice("Jamal")
-melvyn = amigos.cria_vertice("Melvyn")
-rodrigo = amigos.cria_vertice("Rodrigo")
-stella = amigos.cria_vertice("Stella")
-vicky = amigos.cria_vertice("Vicky")
-
-amigos.adiciona_aresta(alice, bob)
-amigos.adiciona_aresta(bob, cynthia)
-amigos.adiciona_aresta(alice, diana)
-amigos.adiciona_aresta(bob, diana)
-amigos.adiciona_aresta(elise, fred)
-amigos.adiciona_aresta(diana, fred)
-amigos.adiciona_aresta(fred, alice)
-amigos.adiciona_aresta(rodrigo, melvyn)
-amigos.adiciona_aresta(stella, jamal)
+  print(f"{'Directed' if direcionado else 'Undirected'} Graph:")
+  print("DFS from J:", grafo.travessia_dfs(vertice_dict['J']))
+  print("BFS from C:", grafo.travessia_bfs(vertice_dict['C']))
+  print("DFS from J to I:", grafo.busca_dfs(vertice_dict['J'], vertice_dict['I']))
+  grafo.desenha()
