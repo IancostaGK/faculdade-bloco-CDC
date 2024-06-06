@@ -91,17 +91,17 @@ class Trie(object):
     return [p["palavra"] for p in palavras]
   
   def sugerir_palavras(self, texto, max=3):
-        """Combina autocompletar e autocorreção"""
-        if self.__busca(texto):
-            return self.autocompletar(texto, max)
+    """Combina autocompletar e autocorreção"""
+    if self.__busca(texto):
+      return self.autocompletar(texto, max)
+    else:
+      prefixo = texto
+      while prefixo:
+        if self.__busca(prefixo):
+          return self.autocompletar(prefixo, max)
         else:
-            prefixo = texto
-            while prefixo:
-                if self.__busca(prefixo):
-                    return self.autocompletar(prefixo, max)
-                else:
-                    prefixo = prefixo[:-1]
-            return []
+          prefixo = prefixo[:-1]
+      return []
 
 def particiona(array, chave, inicio, fim):
   # Escolhe útimo elemento como pivô 

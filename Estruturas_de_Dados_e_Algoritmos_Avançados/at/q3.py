@@ -68,7 +68,6 @@ class Grafo(object):
         fila.extend(v for v in vertice.vizinhos if v not in visitados)
     return visitados
 
-# Create a graph of each type with the vertices A, B, C, D, E, F, G, H, I, and J, and the edges A-G, A-I, C-F, D-A, D-I, H-D, H-E, H-F, H-G, I-H, J-C, and J-H.
 vertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 arestas = [('A', 'G'), ('A', 'I'), ('C', 'F'), ('D', 'A'), ('D', 'I'), ('H', 'D'), ('H', 'E'), ('H', 'F'), ('H', 'G'), ('I', 'H'), ('J', 'C'), ('J', 'H')]
 
