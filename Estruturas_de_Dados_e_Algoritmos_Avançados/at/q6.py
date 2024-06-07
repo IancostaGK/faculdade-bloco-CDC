@@ -101,6 +101,7 @@ def prim(grafo):
   
   vertice_inicial = grafo.vertices[0]
   visitados.add(vertice_inicial)
+  mst.vertices.append(vertice_inicial)
   for vizinho, peso in vertice_inicial.vizinhos.items():
     heapq.heappush(pq, (peso, vertice_inicial, vizinho))
   
@@ -108,12 +109,31 @@ def prim(grafo):
     peso, v1, v2 = heapq.heappop(pq)
     if v2 not in visitados:
       visitados.add(v2)
+      if v2 not in mst.vertices:
+        mst.vertices.append(v2)
       mst.adiciona_aresta(v1, v2, peso)
       for vizinho, peso in v2.vizinhos.items():
         if vizinho not in visitados:
           heapq.heappush(pq, (peso, v2, vizinho))
   
   return mst
+
+def verifica_caminhos_minimos(mst, grafo):
+  arestas_necessarias = set()
+  
+  for v1 in grafo.vertices:
+    for v2 in grafo.vertices:
+      if v1 != v2:
+        caminho, _ = dijkstra(mst, v1, v2)
+        if not caminho: 
+          _, peso = dijkstra(grafo, v1, v2)
+          mst.adiciona_aresta(v1, v2, peso)
+          arestas_necessarias.add((v1, v2, peso))
+        else:
+          for i in range(len(caminho) - 1):
+            arestas_necessarias.add((caminho[i], caminho[i+1], mst.vertices[mst.vertices.index(caminho[i])].vizinhos[caminho[i+1]]))
+  
+  return arestas_necessarias
 
 def instala_galpoes(grafo):
   cobertos = set()
@@ -125,7 +145,7 @@ def instala_galpoes(grafo):
     
     for vertice in grafo.vertices:
       if vertice not in galpoes:
-        cobertura = sum(1 for vizinho in vertice.vizinhos if vizinho not in cobertos)
+        cobertura = sum(1 for vizinho in vertice.vizinhos if vizinho not in cobertos) + (1 if vertice not in cobertos else 0)
         if cobertura > maior_cobertura:
           maior_cobertura = cobertura
           melhor_vertice = vertice
@@ -140,7 +160,7 @@ def instala_galpoes(grafo):
 # Exemplo de uso
 grafo = GrafoPonderado()
 v0 = grafo.cria_vertice('Blum')
-v1 = grafo.cria_vertice('Cerl')
+v1 = grafo.cria_vertice('Cerf')
 v2 = grafo.cria_vertice('Gray')
 v3 = grafo.cria_vertice('Naur')
 v4 = grafo.cria_vertice('Kay')
@@ -158,8 +178,8 @@ grafo.adiciona_aresta(v2, v5, 28)
 grafo.adiciona_aresta(v3, v4, 36)
 grafo.adiciona_aresta(v4, v5, 24)
 
-# # Desenhar o grafo
-# grafo.desenha()
+# Desenhar o grafo
+grafo.desenha()
 
 # Encontrar o caminho mais rápido de Blum a Naur
 inicio = v0  # Blum
@@ -175,11 +195,19 @@ print("Tempo total:", distancia_total, "minutos")
 
 # Encontrar a MST usando o algoritmo de Prim
 mst = prim(grafo)
+arestas_necessarias = verifica_caminhos_minimos(mst, grafo)
+
+# Remover duplicatas e ordenar arestas
+arestas_filtradas = set()
+for v1, v2, peso in arestas_necessarias:
+  if (v2, v1, peso) not in arestas_filtradas:
+    arestas_filtradas.add((v1, v2, peso))
+
 print("Ferrovias a serem mantidas para minimizar o tempo total:")
-for vertice in mst.vertices:
-  for vizinho, peso in vertice.vizinhos.items():
-    print(f"{vertice} - {vizinho}: {peso} minutos")
+for v1, v2, peso in sorted(arestas_filtradas, key=lambda x: (x[0].valor, x[1].valor)):
+  print(f"{v1} - {v2}: {peso} minutos")
 
 # Encontrar as cidades onde serão instalados os galpões
 galpoes = instala_galpoes(grafo)
 print("Cidades onde serão instalados os galpões:", [str(g) for g in galpoes])
+

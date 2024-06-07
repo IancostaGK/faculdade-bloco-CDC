@@ -65,7 +65,7 @@ def vertices_componente(rotulos):
 # # Exemplo de uso
 grafo = GrafoPonderado()
 v0 = grafo.cria_vertice('Blum')
-v1 = grafo.cria_vertice('Cerl')
+v1 = grafo.cria_vertice('Cerf')
 v2 = grafo.cria_vertice('Gray')
 v3 = grafo.cria_vertice('Naur')
 v4 = grafo.cria_vertice('Kay')
