@@ -1,9 +1,12 @@
 from scapy.all import *
 
+# https://scapy.readthedocs.io/en/latest/usage.html#asynchronous-sniffing
 def sniff_packets():
   a = sniff(count=30)
   a.nsummary()
 
+# https://scapy.readthedocs.io/en/latest/usage.html#tcp-traceroute
+# https://scapy.readthedocs.io/en/latest/usage.html#tcp-port-scanning
 def port_scanning_and_traceroute():
   res, unans = sr(IP(dst="187.16.106.206") / TCP(flags="S", dport=(1, 100)))
   res.nsummary(lfilter=lambda s, r: (r.haslayer(TCP) and (r.getlayer(TCP).flags & 2)))
@@ -12,6 +15,7 @@ def port_scanning_and_traceroute():
   for snd, rcv in ans:
     print(snd.ttl, rcv.src, isinstance(rcv.payload, TCP))
 
+# https://scapy.readthedocs.io/en/latest/api/scapy.layers.inet.html#scapy.layers.inet.connect_from_ip
 def detect_arp_spoofing():
   def arp_spoof_detection(packet):
     print("ARP Reply detected from: " + packet[ARP].hwsrc + " for IP: " + packet[ARP].psrc)
