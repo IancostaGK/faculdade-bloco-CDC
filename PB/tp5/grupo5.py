@@ -17,7 +17,7 @@ def coletar_info_dns(dominio):
 
 def buscar_enderecos_vulneraveis(dominio):
     try:
-        resultado = subprocess.run(["wfuzz", "-c", "-z", "file,big.txt", f"--hc=404,403", f"http://{dominio}/FUZZ"], capture_output=True, text=True)
+        resultado = subprocess.run(["wfuzz", "-c", "-z", f"http://{dominio}/FUZZ"], capture_output=True, text=True)
         return resultado.stdout
     except Exception as e:
         return str(e)
