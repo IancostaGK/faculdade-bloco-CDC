@@ -159,8 +159,8 @@ grafo.adiciona_aresta(v3, v4, 36)
 grafo.adiciona_aresta(v4, v5, 24)
 
 # Encontrar o caminho mais rápido de Blum a Naur
-inicio = v0  # Blum
-fim = v3  # Naur
+inicio = v0 
+fim = v3
 caminho, distancia_total = dijkstra(grafo, inicio, fim)
 print("Caminho mais rápido de Blum a Naur:", caminho)
 print("Tempo total:", distancia_total, "minutos")
